@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!-- 		모바일 화면을 쓴다면 작성하는 meta 태그
+	width : 넓이, height : 높이, initial-scale=1.0 (초기배율(기본 꽉찬화면)
+	maximum-scale=1.0 (최대배율(범위 0~10.0)) 
+	minimum-scale=1.0 (최소배율(기본값 : 0.25, 범위(0~10.0)
+	user-scalable=no (사용자 임의로 확대/축소 여부 = yes or no)
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, 
+			maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<title>Mobile Template</title>
+<link rel="stylesheet" href="../mobile/jquery.mobile-1.3.2.min.css">
+<script type="text/javascript" src="../mobile/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../mobile/jquery.mobile-1.3.2.min.js"></script>
+<script type="text/javascript"> /* DB관련 코딩 */
+	
+	var db; // 생성된 DB정보를 저장할 전역변수
+	
+	// ready함수 전에 먼저 이벤트를 발생시켜서 호출되는 함수가 모바일에는 존재, pageinit이벤트가 제일 먼저 발생 -> bind, on
+	// 형식) $('선택자').on('연결시킬 이벤트 종류명', 처리할 페이지 id, 처리할 함수function() {})
+	$(document).on('pageinit', '#page1', function(){
+		// alert('pageinit 이벤트 호출됨!'); 	// DB생성 및 오픈코드 -> dbInit() 를 따로 만들어 호출
+		dbInit();
+	});
+	
+	// pagebeforeshow 이벤트 -> 페이지를 보여주기 전에 먼저 해야할 내용이 있다면 여기에 코딩! (ex DB데이터 불러오기)
+	$(document).on('pagebeforeshow', '#page1', function() {
+		// alert('pagebeforeshow 이벤트 호출 됨!');
+		// weekfriend -> 데이터가 있으면 화면에 출력하고 없으면 없는대로 출력
+		load();
+	});
+	
+	$(document).ready(function() {
+		if(!db) { // pageinit, pagebeforeshow 이벤트가 제대로 발생 안될경우(일종의 보험 코딩)
+			dbInit(); // DB생성
+			load(); // 테이블에서 불러오기
+		}
+		// 추가 버튼을 누른경우
+		$('#btnAdd').bind('click', function() {
+			add();
+			return false; // a링크 이동 못하게 비활성화
+		})
+		// popup창의 데이터 추가 메세지 나온 후 확인버튼을 클릭시 처리할 이벤트
+		$('#btn_confirm').click(function() {
+			
+			return false; // 링크 -> 이동X 비활성화
+		})
+		
+	});
+
+	// 1. DB생성 및 호출함수(html5기준)
+	function dbInit() {
+		
+	};
+	
+	// 2. DB목록 확인함수 작성 -> select * from weekfriend
+	function load() {
+		
+	};
+	
+	// 3. 테이블에 데이터를 넣어주는 함수 필요
+	function add() {
+		
+	};
+	
+	// 4. 팝업창에 메세지를 출력시켜주는 함수 -> 몇번째 레코드가 정상적으로 입력되었습니다
+	function loadMessage(msg) {
+		
+	};
+	
+</script>
+</head>
+<body>
+	<!-- 첫번째 페이지(친구목록 보기) -->
+	<div data-role="page" id="page1">
+		<!-- 1) header 영역 지정 -->
+		<div data-role="header" data-position="fixed">
+			<h1>친구목록</h1>
+			<a href="#page2" data-icon="plus" class="ui-btn-right" data-iconpos="right">등록</a>
+		</div>
+		
+		<!-- 2) content 지정(listview 이용(전화번호부 처럼 출력) 검색기능(data-filter="true") -->
+		<div data-role="content">
+			<ul data-role="listview" data-filter="true" id="output">
+				
+			</ul>
+		</div>
+		
+		<!-- 3) Footer 지정 -->
+		<div data-role="footer">
+			<h1>화면하단</h1>		
+			
+		</div>
+	</div>	
+	
+	<!-- 두번째 페이지(친구추가(가입폼)) -->
+	<div data-role="page" id="page2">
+		<!-- 1) header 영역 지정 -->
+		<div data-role="header" data-position="fixed">
+			<h1>친구추가</h1>
+			<a data-icon="arrow-l" data-rel="back">이전</a>
+		</div>
+		
+		<!-- 2) content 지정(본문) -->
+		<div data-role="content">
+			<form id="insfrm">
+				<div data-role="fieldcontain">
+				<label for="name">이름 : </label>
+				<input type="text" id="name">
+			</div>
+			
+			<div data-role="fieldcontain">
+				<label for="phone">전화번호 : </label>
+				<input type="text" id="phone">
+			</div>			
+			
+			<div data-role="fieldcontain">
+				<label for="address">주소 : </label>
+				<input type="text" id="address">
+			</div>
+			
+			<a data-role="button" id="btnAdd">추가</a>
+			</form>
+		</div>
+		<!-- 
+			팝업창 효과(스타일 적용) data-mini="true"
+			data-overlay-theme="b" (부모창과 자식창이 화면에 겹쳐서 보여줄 때 세련되게 보이는 테마클래스)
+			data-role="popup" (팝업창)	
+		
+		 -->
+		<div data-role="popup" id="notice" data-theme="d" data-overlay-theme="b" class="ui-content" 
+				style="max-width : 340px; text-align : center;">
+			<p class="notice-content"></p>
+			<a href="#page1" data-role="button" data-inline="true" data-mini="true" id="btn_confirm">확인</a>
+		
+		</div>
+		
+		
+		
+		<!-- 3) Footer 지정 -->
+		<div data-role="footer" data-position="fixed">
+			<h1>나의 친구들</h1>		
+			
+		</div>
+	</div>		
+		
+		
+		
+	
+	
+</body>
+</html>
+
+
+
